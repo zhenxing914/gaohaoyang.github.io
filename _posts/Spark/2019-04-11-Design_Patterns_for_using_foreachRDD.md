@@ -1,0 +1,73 @@
+---
+
+layout: post
+title:  "Design Patterns for using foreachRDD"
+categories: "Spark"
+tags: "Spark "
+author: "songzhx"
+date:   2019-04-11 16:34:00 
+---
+
+## Design Patterns for using foreachRDD
+
+`dstream.foreachRDD` is a powerful primitive that allows data to be sent out to external systems. However, it is important to understand how to use this primitive correctly and efficiently. Some of th e common mistakes to avoid are as follows.
+
+### 1. 先创建连接
+
+```scala
+dstream.foreachRDD { rdd =>
+  val connection = createNewConnection()  // executed at the driver
+  rdd.foreach { record =>
+    connection.send(record) // executed at the worker
+  }
+}
+```
+
+​	This is incorrect as this requires the connection object to be serialized and sent from the driver to the worker. Such connection objects are rarely transferable across machines. This error may manifest as serialization errors (connection object not serializable), initialization errors (connection object needs to be initialized at the workers), etc. The correct solution is to create the connection object at the worker.
+
+###  2.每个record都创建连接
+
+```scala
+dstream.foreachRDD { rdd =>
+  rdd.foreach { record =>
+    val connection = createNewConnection()
+    connection.send(record)
+    connection.close()
+  }
+}
+```
+
+### 3.在Partition中创建连接，发送所有record
+
+```scala
+dstream.foreachRDD { rdd =>
+  rdd.foreachPartition { partitionOfRecords =>
+    val connection = createNewConnection()
+    partitionOfRecords.foreach(record => connection.send(record))
+    connection.close()
+  }
+}
+```
+
+
+
+### 4.rdd.foreachPartition中使用线层池
+
+```scala
+dstream.foreachRDD { rdd =>
+  rdd.foreachPartition { partitionOfRecords =>
+    // ConnectionPool is a static, lazily initialized pool of connections
+    val connection = ConnectionPool.getConnection()
+    partitionOfRecords.foreach(record => connection.send(record))
+    ConnectionPool.returnConnection(connection)  // return to the pool for future reuse
+  }
+}
+```
+
+
+
+
+
+参考：
+
+<https://spark.apache.org/docs/latest/streaming-programming-guide.html#output-operations-on-dstreams>
