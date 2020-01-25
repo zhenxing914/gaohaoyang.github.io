@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "scala类型总结-Null、null、 Nothing、 Nil、 None和Unit"
+title:  "scala类型总结-Null、null、Nil、Nothing、None和Unit"
 categories: "scala"
 tags: "scala"
 author: "songzhx"
@@ -63,6 +63,8 @@ That worked!
 
 ```
 
+
+
 ## 2. Nil
 
 ```scala
@@ -92,6 +94,8 @@ res7: List[object Nil] = List(List())
 这是一个名单，一个List。
 
 没有内容。
+
+
 
 ## 3. Nothing
 
@@ -126,6 +130,8 @@ scala> def e = throw new Exception("s")
 e: Nothing
 ```
 
+
+
 ## 4. None
 
 当你用Java写一个函数，遇到你没有什么实用价值的情况时，你会怎么做？有几种方法来处理它。你可以返回null，但是这会导致问题。如果调用者不希望得到null，那么当他尝试使用它时可能会面临**NullPointerException**，否则调用者必须检查null。一些函数肯定不会返回null，但有些函数可能会。作为一个调用者，你不知道。
@@ -157,13 +163,15 @@ scala> printResult(-50)
 No string!
 ```
 
-getAStringMaybe方法返回Option [String]。Option是一个具有两个子类的抽象类，类Some和对象None。这是实例化Option的唯一两种方法。所以getAStringMaybe可以返回一个Some [String]或None。Some和None是大小写类，所以你可以使用方便的match / case结构来处理结果。没有一个对象表示没有方法的结果。
+getAStringMaybe方法返回Option [String]。**Option是一个具有两个子类的抽象类，类Some和对象None。**这是实例化Option的唯一两种方法。所以getAStringMaybe可以返回一个Some [String]或None。Some和None是大小写类，所以你可以使用方便的match / case结构来处理结果。没有一个对象表示没有方法的结果。
 
 Option [T]返回类型的目的是告诉调用者该方法可能以Some [T]的形式返回T，或者返回None来表示没有结果。通过这种方式，调用者可以知道他什么时候做，不需要检查一个好的返回值。
 
 另一方面，只是因为一个方法被声明为返回一些非Option类型并不意味着它不能返回null。而且，声明为返回Option的方法实际上可以返回null。所以这项技术并不完美。
 
 这是一个巧妙的技巧，但是你能想象一个代码库：在选项[This]和Option [That]遍布整个地方，以及随后的所有匹配块？**我想说谨慎使用Option。**
+
+
 
 ## 5. Unit
 
