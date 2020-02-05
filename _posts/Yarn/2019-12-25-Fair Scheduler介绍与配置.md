@@ -8,7 +8,7 @@ Fair Scheduler将整个Yarn的可用资源划分成多个资源池，每个资�
 
 如图所示，假设整个Yarn集群的可用资源为100vCPU，100GB内存，现在为3个业务各自规划一个资源池，另外，规划一个default资源池，用于运行其他用户和业务提交的任务。如果没有在任务中指定资源池（通过参数mapreduce.job.queuename），那么可以配置使用用户名作为资源池名称来提交任务，即用户businessA提交的任务被分配到资源池businessA中，用户businessC提交的任务被分配到资源池businessC中。除了配置的固定用户，其他用户提交的任务将会被分配到资源池default中。
 
-这里的用户名，就是提交Application所使用的Linux/Unix用户名。
+这里的用户名，就是提交**Application所使用的Linux/Unix用户名**。
 
 另外，每个资源池可以配置允许提交任务的用户名，比如，在资源池businessA中配置了允许用户businessA和用户lxw1234提交任务，如果使用用户lxw1234提交任务，并且在任务中指定了资源池为businessA，那么也可以正常提交到资源池businessA中。
 
@@ -33,6 +33,8 @@ Fair Scheduler将整个Yarn的可用资源划分成多个资源池，每个资�
 Fair Scheduler除了需要在yarn-site.xml文件中启用和配置之外，还需要一个XML文件来配置资源池以及配额，而该XML中每个资源池的配额可以动态更新，之后使用命令：yarn rmadmin –refreshQueues 来使得其生效即可，不用重启Yarn集群。
 
 需要注意的是：动态更新只支持修改资源池配额，如果是新增或减少资源池，则需要重启Yarn集群。
+
+
 
 ## 5.Fair Scheduler配置示例
 
