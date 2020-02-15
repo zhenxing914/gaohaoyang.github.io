@@ -18,7 +18,7 @@ Peter Steiner 说过，"[On the Internet, nobody knows you're a dog](https://en.
 
 ```java
 HystrixCommandProperties.Setter()
-    ..withExecutionTimeoutInMilliseconds(int)
+    .withExecutionTimeoutInMilliseconds(int)
 ```
 
 ### TimeoutEnabled

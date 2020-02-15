@@ -10,7 +10,7 @@ date:   2019-04-12 10:15:00
 
 
 ```
-**原文：**
+原文
 http://oldfashionedsoftware.com/2008/08/20/a-post-about-nothing/
 ```
 
