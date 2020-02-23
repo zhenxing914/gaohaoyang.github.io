@@ -20,4 +20,5 @@ Dubbo之前的一个定位，就是一个单纯的服务框架而已，不提供
 
 胜是胜在功能齐全，中小型公司开箱即用，直接满足系统的开发需求
 
-**Spring Cloud**原来支持的一些技术慢慢的未来会演变为，跟阿里技术体系进行融合，**Spring Cloud Alibaba**，阿里技术会融入**Spring Cloud**里面去
+**Spring Cloud**原来支持的一些技术慢慢的未来会演变为，跟阿里技术体系进行融合，**Spring Cloud Alibaba**，阿里技术会融入**Spring Cloud**里面去.
+

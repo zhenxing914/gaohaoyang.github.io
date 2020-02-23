@@ -25,7 +25,7 @@ date:   2018-05-08 17:33:00
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gbx7uhch9xj30m60akjst.jpg" alt="image-20200215171342570" style="zoom:50%;" />
 
-我们来看上面的图。说白了，ReentrantLock内部包含了一个AQS对象，也就是AbstractQueuedSynchronizer类型的对象。这个AQS对象就是ReentrantLock可以实现加锁和释放锁的关键性的核心组件。
+我们来看上面的图。说白了，**ReentrantLock内部包含了一个AQS对象**，也就是AbstractQueuedSynchronizer类型的对象。这个AQS对象就是ReentrantLock可以实现加锁和释放锁的关键性的核心组件。
 
 ## 2. ReentrantLock加锁和释放锁的底层原理
 

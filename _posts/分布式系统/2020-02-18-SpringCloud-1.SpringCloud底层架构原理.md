@@ -1,9 +1,3 @@
-SpringCloud架构图
-
-
-
-
-
 ## Spring Cloud整体介绍
 
 如果你基于**Spring Cloud**对外发布一个接口，实际上就是支持**http协议**的，对外发布的就是一个最最普通的**Spring MVC的http接口**
