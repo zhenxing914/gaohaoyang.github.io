@@ -80,9 +80,13 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 ### 2. 控制输出（reducer、partition、task）数量
 1. 控制reducer数量
    1. Reducer等于输出文件个数 
-   2. Reducer数据量很大  task数据量多，数据倾斜、耗时时间长
-   3. reducer数据量很小  
+   2. Reducer个数少，则Reducer数据量很大  task数据量多，数据倾斜、耗时时间长
+   3. Reducer个数多，则Reducer数据量很小，会产生小文件。
    4.  hive reducer 等价于 spark sql partition(200)
+   
+> **Tip**
+>
+> reducer的数量并不是越多越好，我们知道有多少个reducer就会生成多少个文件，小文件过多在hdfs中就会占用大量的空间，造成资源的浪费。如果reducer数量过小，导致某个reducer处理大量的数据（数据倾斜就会出现这样的现象），没有利用hadoop的分而治之功能，甚至会产生OOM内存溢出的错误。使用多少个reducer处理数据和业务场景相关，不同的业务场景处理的办法不同。
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z8wktu9j31220fywul.jpg" alt="image-20200225203832744" style="zoom:50%;" />
 
@@ -100,6 +104,28 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 1. explain extend 
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z99f7byj312201w40q.jpg" alt="image-20200225203855854" style="zoom:50%;" />
+
+### 5. distinct + union all 、union
+
+如果遇到要使用union去重的场景，使用distinct + union all比使用union的效果好。
+
+### 6. 数据倾斜问题
+
+数据倾斜的现象：任务进度长时间维持在99%，只有少量reducer任务完成，未完成任务数据读写量非常大，超过10G。在聚合操作是经常发生。 通用解决方法：``set hive.groupby.skewindata=true;``
+将一个map reduce拆分成两个map reduce。
+
+说说我遇到过的一个场景，需用统计某个一天每个用户的访问量，SQL如下：
+
+```sql
+select t.user_id,count(*) from user_log t group by t.user_id
+```
+
+执行这条语句之后，发现任务维持在99%达到一个小时。后面自己分析user_log表，发现user_id有很多数据为null。user_id为null的数据会有一个reducer来处理，导致出现数据倾斜的现象。解决方法有两种：
+
+1. 通过where条件过滤掉user_id为null的记录。
+2. 将为null的user_id设置一个随机数值。保证所有数据平均的分配到所有的reducer中处理。
+
+<img src="/Users/song/Library/Application Support/typora-user-images/image-20200301171407611.png" alt="image-20200301171407611" style="zoom:50%;" />
 
 
 
@@ -132,3 +158,7 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z9n3n1nj30tq0aan0k.jpg" alt="image-20200225204229089" style="zoom:50%;" />
 
 
+
+参考：
+
+reducer个数 ： https://zhuanlan.zhihu.com/p/47037815 
