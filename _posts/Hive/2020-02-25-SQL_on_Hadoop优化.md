@@ -73,10 +73,15 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 ## 2. 优化-语法  
 
 ### 1. 排序：order by、sort by、 distribute by、cluster by
-  1. order by 严格模式必须加上limit，**只会产生一个reducer**。（慎用）
+  1. order by 严格模式必须加上limit，**只会产生一个reducer。（慎用）（mysql排序使用order by）**
+
   2. sort by ：**保证每个reducer内部是有序的**。set mapred.reduce.task=3
-  3. distribute by: 不是排序，是按照指定的字段将数据分到不同的reduce中。
+
+  3. distribute by: 不是排序，是按照指定的字段将数据**分到不同的reduce中**。
+
   4. cluster by：是distributeBy 和 sort by 简写
+
+     
 ### 2. 控制输出（reducer、partition、task）数量
 1. 控制reducer数量
    1. Reducer等于输出文件个数 
@@ -90,7 +95,10 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z8wktu9j31220fywul.jpg" alt="image-20200225203832744" style="zoom:50%;" />
 
+
+
 ### 3. join：普通join、mapjoin
+
 1. Hive中有普通join、mapjoin。
 2. set hive.auto.convert.join = false
 3. 默认join 一个表一个mapper
@@ -105,14 +113,20 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z99f7byj312201w40q.jpg" alt="image-20200225203855854" style="zoom:50%;" />
 
+
+
 ### 5. distinct + union all 、union
 
 如果遇到要使用union去重的场景，使用distinct + union all比使用union的效果好。
+
+
 
 ### 6. 数据倾斜问题
 
 数据倾斜的现象：任务进度长时间维持在99%，只有少量reducer任务完成，未完成任务数据读写量非常大，超过10G。在聚合操作是经常发生。 通用解决方法：``set hive.groupby.skewindata=true;``
 将一个map reduce拆分成两个map reduce。
+
+<img src="/Users/song/Library/Application Support/typora-user-images/image-20200301171407611.png" alt="image-20200301171407611" style="zoom:50%;" />
 
 说说我遇到过的一个场景，需用统计某个一天每个用户的访问量，SQL如下：
 
@@ -124,8 +138,6 @@ select t.user_id,count(*) from user_log t group by t.user_id
 
 1. 通过where条件过滤掉user_id为null的记录。
 2. 将为null的user_id设置一个随机数值。保证所有数据平均的分配到所有的reducer中处理。
-
-<img src="/Users/song/Library/Application Support/typora-user-images/image-20200301171407611.png" alt="image-20200301171407611" style="zoom:50%;" />
 
 
 
@@ -152,6 +164,8 @@ select t.user_id,count(*) from user_log t group by t.user_id
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z9gwscwj30sa0460td.jpg" alt="image-20200225204210930" style="zoom:50%;" />
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z9jvkvgj311y08aqa0.jpg" alt="image-20200225204158176" style="zoom: 50%;" />
+
+
 
 ### 3. JVM重用
 
