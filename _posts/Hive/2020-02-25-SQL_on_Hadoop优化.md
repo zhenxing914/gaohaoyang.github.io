@@ -56,8 +56,8 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
   
 5. Hdfs配置
 		 
-		 ```shell
-		  ./bin/hadoop checknative 验证已经安装哪些压缩工具
+		 ```bash
+	./bin/hadoop checknative #验证已经安装哪些压缩工具
 	```
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z8jxd1xj31240ckk06.jpg" alt="image-20200225203513530" style="zoom:50%;" />
@@ -143,15 +143,15 @@ select t.user_id,count(*) from user_log t group by t.user_id
 
    Hadoop采用了推测执行（Speculative Execution）机制，它根据一定的法则推测出“拖后腿”的任务，并为这样的任务启动一个备份任务，让该任务与原始任务同时处理同一份数据，并最终选用最先成功运行完成任务的计算结果作为最终结果。
 
-         <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8xj29b10j311009wjxb.jpg" alt="image-20200225204104192" style="zoom: 40%;" />
+<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8xj29b10j311009wjxb.jpg" alt="image-20200225204104192" style="zoom: 40%;" />
 
 
-​         
+
 ### 2. 并行执行
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z9gwscwj30sa0460td.jpg" alt="image-20200225204210930" style="zoom:50%;" />
 
-![image-20200225204158176](https://tva1.sinaimg.cn/large/0082zybpgy1gc8z9jvkvgj311y08aqa0.jpg)
+<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z9jvkvgj311y08aqa0.jpg" alt="image-20200225204158176" style="zoom: 50%;" />
 
 ### 3. JVM重用
 
