@@ -108,23 +108,19 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 
 <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z95pabcj30oy0eodkz.jpg" alt="image-20200225203948893" style="zoom:50%;" />
 
-### 4. 执行计划
-1. explain extend 
-
-<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z99f7byj312201w40q.jpg" alt="image-20200225203855854" style="zoom:50%;" />
 
 
-
-### 5. distinct + union all 、union
+### 4. distinct + union all 、union
 
 如果遇到要使用union去重的场景，使用distinct + union all比使用union的效果好。
 
 
 
-### 6. 数据倾斜问题
+### 5. 数据倾斜问题
 
-数据倾斜的现象：任务进度长时间维持在99%，只有少量reducer任务完成，未完成任务数据读写量非常大，超过10G。在聚合操作是经常发生。 通用解决方法：``set hive.groupby.skewindata=true;``
-将一个map reduce拆分成两个map reduce。
+数据倾斜的现象：任务进度长时间维持在99%，只有少量reducer任务完成，未完成任务数据读写量非常大，超过10G。在聚合操作是经常发生。
+
+ 通用解决方法：``set hive.groupby.skewindata=true;``将一个map reduce拆分成两个map reduce。
 
 <img src="/Users/song/Library/Application Support/typora-user-images/image-20200301171407611.png" alt="image-20200301171407611" style="zoom:50%;" />
 
@@ -138,6 +134,14 @@ select t.user_id,count(*) from user_log t group by t.user_id
 
 1. 通过where条件过滤掉user_id为null的记录。
 2. 将为null的user_id设置一个随机数值。保证所有数据平均的分配到所有的reducer中处理。
+
+### 6. 执行计划
+
+1. explain extend 
+
+<img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z99f7byj312201w40q.jpg" alt="image-20200225203855854" style="zoom:50%;" />
+
+
 
 
 
