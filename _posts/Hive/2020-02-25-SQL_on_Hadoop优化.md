@@ -124,6 +124,11 @@ metaStore：（hive、impala、presto、SparkSQL）框架之间是共享元数�
 
 <img src="/Users/song/Library/Application Support/typora-user-images/image-20200301171407611.png" alt="image-20200301171407611" style="zoom:50%;" />
 
+有数据倾斜的时候进行负载均衡。
+当选项设定为 true，生成的查询计划会有两个 MR Job。第一个 MR Job 中，Map 的输出结果集合会随机分布到Reduce 中，每个 Reduce 做部分聚合操作，并输出结果，这样处理的结果是相同的 Group By Key有可能被分发到不同的 Reduce 中，从而达到负载均衡的目的；第二个 MR Job 再根据预处理的数据结果按照 Group ByKey 分布到 Reduce 中（这个过程可以保证相同的 Group By Key 被分布到同一个 Reduce中），最后完成最终的聚合操作。
+
+
+
 说说我遇到过的一个场景，需用统计某个一天每个用户的访问量，SQL如下：
 
 ```sql
@@ -180,3 +185,5 @@ select t.user_id,count(*) from user_log t group by t.user_id
 参考：
 
 reducer个数 ： https://zhuanlan.zhihu.com/p/47037815 
+
+skewdata: https://www.jianshu.com/p/0556aaab6fd2
