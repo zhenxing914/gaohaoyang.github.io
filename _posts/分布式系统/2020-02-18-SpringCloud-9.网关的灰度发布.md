@@ -15,6 +15,8 @@ CREATE TABLE `gray_release_config` (
  
 ```
 
+
+
 ## 2. SpringCloud
 
 ### 2.1 zuul配置
@@ -72,6 +74,8 @@ int seed = random.getInt() * 100;
     }
 }
 ```
+
+
 
 ### 2.2 order-service配置
 
