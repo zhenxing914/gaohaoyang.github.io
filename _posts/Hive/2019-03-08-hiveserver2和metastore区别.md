@@ -5,7 +5,6 @@ categories: "Hive"
 tags: "Hive"
 author: "songzhx"
 date:   2019-03-08 17:50:00
-
 ---
 
 ## 1. hiveserver2和metastore
@@ -32,7 +31,13 @@ date:   2019-03-08 17:50:00
 
 
 
-## 2. beeline的使用方法
+## 2. metastore作用
+
+客户端连接metastore服务，metastore再去连接MySQL数据库来存取元数据。有了metastore服务，就可以有多个客户端同时连接，而且这些客户端不需要知道MySQL数据库的用户名和密码，只需要连接metastore 服务即可。
+
+
+
+## 3. beeline的使用方法
 
 ``` bash
 ##启动hiveServer2
