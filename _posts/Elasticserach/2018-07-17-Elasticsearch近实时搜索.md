@@ -17,7 +17,7 @@ date:   2018-7-17 16:24:00
 
 **图 19. 在内存缓冲区中包含了新文档的 Lucene 索引**
 
-![A Lucene index with new documents in the in-memory buffer](https://tva1.sinaimg.cn/large/006y8mN6gy1g6fd9rvj52j30ku0dr0t5.jpg)
+<img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g6fd9rvj52j30ku0dr0t5.jpg" alt="A Lucene index with new documents in the in-memory buffer" style="zoom: 67%;" />
 
  
 
@@ -25,7 +25,7 @@ Lucene 允许新段被写入和打开--使其包含的文档在未进行一次�
 
 **图 20. 缓冲区的内容已经被写入一个可被搜索的段中，但还没有进行提交**
 
-![The buffer contents have been written to a segment, which is searchable, but is not yet commited](https://tva1.sinaimg.cn/large/006y8mN6gy1g6fd9w0ysxj30ku0drq39.jpg)
+<img src="https://tva1.sinaimg.cn/large/006y8mN6gy1g6fd9w0ysxj30ku0drq39.jpg" alt="The buffer contents have been written to a segment, which is searchable, but is not yet commited" style="zoom:67%;" />
 
  
 

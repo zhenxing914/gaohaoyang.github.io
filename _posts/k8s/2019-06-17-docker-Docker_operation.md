@@ -1,10 +1,8 @@
+# 1. Docker file 基本知识
 
+## 1. 规则
 
-## 一 Docker file 基本知识
-
-## 1.1 规则
-
-### 1.1.1 Docker file 指令格式
+### 1. Docker file 指令格式
 
 ```
 指令(命令)	参数列表
@@ -12,14 +10,14 @@
 
 
 
-### 1.1.2 Docker file 常用指令
+### 2. Docker file 常用指令
 
 很多用法都支持shell 格式，按照 shell 命令格式写即可。
 
 常用命令解释：
 
 -  添加文件、目录(源压缩包会解压，源链接会下载)
-    ```
+    ```shell
 	ADD src dest
 	```
 	
@@ -38,7 +36,7 @@
 - 工作路径(没有会自动创建)
 
    ```
-   WORKDIR 目 录
+   WORKDIR 目录
    ```
 
 - 暴漏端口(默认 TCP 协议)
@@ -61,7 +59,7 @@
 
 <https://docs.docker.com/v17.09/engine/reference/builder/#usage>
 
-## 1.2 示例
+## 2. 示例
 
 ```dockerfile
 
@@ -88,7 +86,7 @@ EXPOSE 8090
 
 
 
-# **二**	**Docker** **安装**
+# 2. Docker安装
 
 按照系统以及发行版安装即可，如果可以联网，复制粘贴就行。
 
@@ -100,7 +98,7 @@ EXPOSE 8090
 
 
 
-# 三	docker 常用命令
+# 3. Docker 常用命令
 
 -  docker build -t  镜像名字：镜像 tag -f dockerFile  **.**(猜测是docker file 执行目录)
 
@@ -124,7 +122,7 @@ docker 命令用法详见：<https://docs.docker.com/engine/reference/run/>
 
 
 
-# 四	概念补充
+# 4. 概念补充
 
 ​	Docker file 把资源打包成镜像image, 运行的 image 叫容器 container，run 命令每执行一次，都会重新起一个容器。对特定容器的操作，通过 docker container 操作去执行。
 

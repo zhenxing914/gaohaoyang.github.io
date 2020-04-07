@@ -24,6 +24,8 @@ date:   2018-7-17 16:24:00
 
 ```
 
+
+
 ### 超时问题
 
 通常分片处理完它所有的数据后再把结果返回给协同节点，协同节点把收到的所有结果合并为最终结果。
@@ -62,6 +64,8 @@ GET /_search?routing=user_1,user2
 ```
 
 这个技术在设计大规模搜索系统时就会派上用场，我们在 [*扩容设计*](https://www.elastic.co/guide/cn/elasticsearch/guide/current/scale.html) 中详细讨论它。
+
+
 
 ### 搜索类型
 

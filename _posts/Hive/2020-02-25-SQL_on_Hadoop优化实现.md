@@ -105,6 +105,21 @@ set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
 按照100m来分隔，把那些小于100m的（包括小文件和分隔大文件剩下的）合并。
 ```
 
+​		可以简单的理解为集群对一个表分区下面的文件进行分发到各个节点，之后根据mapred.max.split.size确认要启动多少个map数，逻辑如下  　　
+
+a. 假设有两个文件大小分别为(256M,280M)被分配到节点A，那么会启动两个map，剩余的文件大小为10MB和35MB因为每个大小都不足241MB会先做保留  　
+
+b. 根据参数set mapred.min.split.size.per.node看剩余的大小情况并进行合并,如果值为1，表示a中每个剩余文件都会自己起一个map，这里会起两个，如果设置为大于45*1024*1024则会合并成一个块，并产生一个map  　　
+
+如果mapred.min.split.size.per.node为10*1024*1024，那么在这个节点上一共会有4个map，处理的大小为(245MB,245MB,10MB,10MB，10MB，10MB)，余下9MB  　　
+
+如果mapred.min.split.size.per.node为45*1024*1024，那么会有三个map，处理的大小为(245MB,245MB,45MB)  　　实际中mapred.min.split.size.per.node无法准确地设置成45*1024*1024，会有剩余并保留带下一步进行判断处理  
+
+c. 对b中余出来的文件与其它节点余出来的文件根据mapred.min.split.size.per.rack大小进行判断是否合并，对再次余出来的文件独自产生一个map处理
+
+
+
+
 - 增加mapper数量
 
 ```mysql
@@ -187,6 +202,8 @@ On c.memberid = d.memberid
 
 On a.memberid = b.memberid。
 ```
+
+
 
 ## 4. multi insert ,union all
 
@@ -707,3 +724,11 @@ hive.optimize.index.filter：自动使用索引
 
 hive.optimize.index.groupby：使用聚合索引优化GROUP BY操作
 ```
+
+
+
+
+
+参考：
+
+set split size  https://www.jianshu.com/p/0ecccfc38923 
