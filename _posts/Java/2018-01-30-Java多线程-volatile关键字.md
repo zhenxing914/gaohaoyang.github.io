@@ -360,3 +360,137 @@ public class MyService {
 }
 ```
 
+## 4. Volatitle保证指令不会重排
+
+### 1. 指令重排
+
+
+
+#### 例1.A线程指令重排导致B线程出错
+对于在同一个线程内，这样的改变是不会对逻辑产生影响的，但是在多线程的情况下指令重排序会带来问题。看下面这个情景:
+
+在线程A中:
+
+context = loadContext();
+
+inited = true;
+
+ 
+
+在线程B中:
+
+while(!inited ){ //根据线程A中对inited变量的修改决定是否使用context变量
+
+   sleep(100);
+
+}
+
+doSomethingwithconfig(context);
+
+ 
+
+假设线程A中发生了指令重排序:
+
+inited = true;
+
+context = loadContext();
+
+ 
+
+那么B中很可能就会拿到一个尚未初始化或尚未初始化完成的context,从而引发程序错误。
+
+
+#### 例2.指令重排导致单例模式失效
+我们都知道一个经典的懒加载方式的双重判断单例模式：
+
+```java
+public class Singleton {
+
+  private static Singleton instance = null;
+
+  private Singleton() { }
+
+  public static Singleton getInstance() {
+
+     if(instance == null) {
+    
+        synchronzied(Singleton.class) {
+    
+           if(instance == null) {
+    
+               instance = new Singleton();  //非原子操作
+    
+           }
+    
+        }
+    
+     }
+    
+     return instance;
+
+   }
+
+}
+```
+
+
+
+看似简单的一段赋值语句：instance= new Singleton()，但是很不幸它并不是一个原子操作，其实际上可以抽象为下面几条JVM指令：
+
+```java
+memory =allocate();    //1：分配对象的内存空间 
+
+ctorInstance(memory);  //2：初始化对象 
+
+instance =memory;     //3：设置instance指向刚分配的内存地址 
+
+```
+
+ 上面操作2依赖于操作1，但是操作3并不依赖于操作2，所以JVM是可以针对它们进行指令的优化重排序的，经过重排序后如下：
+
+```java
+memory =allocate();    //1：分配对象的内存空间 
+
+instance =memory;     //3：instance指向刚分配的内存地址，此时对象还未初始化
+
+ctorInstance(memory);  //2：初始化对象
+
+
+```
+
+可以看到指令重排之后，instance指向分配好的内存放在了前面，而这段内存的初始化被排在了后面。
+
+在线程A执行这段赋值语句，在初始化分配对象之前就已经将其赋值给instance引用，恰好另一个线程进入方法判断instance引用不为null，然后就将其返回使用，导致出错。
+
+### 2. 解决重排问题
+
+**解决方案：**
+
+例子1中的inited和例子2中的instance以关键字volatile修饰之后，就会阻止JVM对其相关代码进行指令重排，这样就能够按照既定的顺序指执行。
+
+volatile关键字通过提供“内存屏障”的方式来防止指令被重排序，为了实现volatile的内存语义，编译器在生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。
+
+大多数的处理器都支持内存屏障的指令。
+
+对于编译器来说，发现一个最优布置来最小化插入屏障的总数几乎不可能，为此，Java内存模型采取保守策略。下面是基于保守策略的JMM内存屏障插入策略：
+
+```shell
+在每个volatile写操作的前面插入一个StoreStore屏障。
+
+在每个volatile写操作的后面插入一个StoreLoad屏障。
+
+在每个volatile读操作的后面插入一个LoadLoad屏障。
+
+在每个volatile读操作的后面插入一个LoadStore屏障。
+```
+
+
+
+
+
+
+
+
+
+指令重排序： https://blog.csdn.net/jiyiqinlovexx/article/details/50989328
+
