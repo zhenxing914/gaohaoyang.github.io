@@ -1,3 +1,1093 @@
+```json
+
+GET ls-3-2017.04.13/_search
+{
+  
+}
+
+PUT /index_test
+
+curl 
+
+PUT /index
+
+
+
+POST /index/fulltext/_mapping
+{
+
+    "fulltext": {
+
+             "_all": {
+
+            "analyzer": "ik_max_word",
+
+            "search_analyzer": "ik_max_word",
+
+            "term_vector": "no",
+
+            "store": "false"
+
+        },
+
+        "properties": {
+
+            "content": {
+
+                "type": "text",
+
+                "analyzer": "ik_max_word",
+
+                "search_analyzer": "ik_max_word",
+
+                "include_in_all": "true",
+
+                "boost": 8
+
+            }
+
+        }
+
+    }
+
+}
+
+POST /index/fulltext/1
+{"content":"�������������˵��Ǹ���̯����"}
+
+
+POST /index/fulltext/2
+{"content":"������������У����������·Ȩ"}
+
+
+POST /index/fulltext/3
+{"content":"�к��澯��ͻ���飺����ƽ��ÿ����1���й��洬"}
+
+POST /index/fulltext/11
+{"content":"�к��澯��ͻ���飺����ƽ��ÿ����1���й��洬"}
+
+POST /index/fulltext/4
+{"content":"�й�פ��ɼ�����¹�����������ǹ�� �ӷ�������"}
+
+POST /index/fulltest/_search
+{
+  "query":{
+    "term":{
+      "content":"����*"
+    }
+  }
+}
+
+
+GET /index/fulltext/_search
+{
+  "query":
+  {
+    "match":{
+      "content":"�������������˵��Ǹ���̯����"
+    }
+  }
+}
+
+
+GET userprofiling/usertag/17321280019
+
+
+
+
+POST /index/fulltext/_search
+{
+
+    "query" : { "match" : { "content" : "�й�" }},
+
+    "highlight" : {
+
+        "pre_tags" : ["<tag1>", "<tag2>"],
+
+        "post_tags" : ["</tag1>", "</tag2>"],
+
+        "fields" : {
+
+            "content" : {}
+
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GET /userprofiling/usertag/17317978869
+
+
+POST userprofiling/usertag/_search
+{
+  "query":{
+    "bool": {
+      "must": [
+        {  "match": {
+          "tongxinaddress":  "÷¤·"
+          }
+        },
+        {
+          "match": {
+            "agerange":  "90��"
+          }
+        }
+      ]
+    }
+  }
+}
+
+POST userprofiling/usertag/_search
+{
+  "query":{
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "agerange":  "90��"
+          }
+        }
+      ]
+    }
+  }
+}
+
+POST userprofiling/usertag/_search
+{
+  "query":{
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "agerange":  "90��"
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+#term��ѯ
+POST  userprofiling/usertag/_search
+{
+  "query": {
+    "match": {
+      "birthday":  "19840905"
+    }
+  }
+}
+
+POST /testes/userlist/1
+{
+  "name":"������",
+  "age" : 30,
+  "sex" : "��",
+  "hometown":"����",
+  "home_address":"�Ϻ���"
+}
+
+POST /testes/userlist/_search
+{
+  "query":{
+    "term":{
+      "name":"������"
+    }
+  }
+}
+
+GET  testes/userlist/_search
+{
+  "query":{
+    "term":{
+        "name":"������"
+    }
+  }
+}
+
+
+DELETE  testesz_analyzer
+
+PUT testes_analyzer
+
+POST /testes_analyzer/userlist_analyzer/_mapping
+{
+  "userlist_analyzer":{
+  "properties": {
+    "name":{
+      "type":"text",
+      "analyzer": "ik_smart",
+      "search_analyzer": "ik_smart"
+    },
+    "homeaddress":{
+      "type":"text",
+      "analyzer": "ik_smart",
+      "search_analyzer": "ik_smart"
+    },
+    "intresting":{
+      "type": "text",
+      "analyzer": "ik_smart"
+    }
+  }
+  }
+}
+
+POST /testes_analyzer/userlist_analyzer/1
+{
+  "id":1,
+  "name":"����",
+  "homeaddress":"�Ϻ����ֶ�����������·258Ū",
+  "intresting":"����",
+  "hometown":"����"
+}
+
+
+POST /testes_analyzer/userlist_analyzer/2
+{
+"id":1,
+"name":"����",
+"homeaddress":"�Ϻ����ֶ�����������·258Ū",
+"intresting":"����",
+"hometown":"����"
+}
+        
+POST /testes_analyzer/userlist_analyzer/3
+{
+"id":1,
+"name":"����",
+"homeaddress":"�Ϻ����ֶ���������·123��",
+"intresting":"����",
+"hometown":"ɽ��"
+}
+
+# ��ѯ������Ϣ
+POST  testes_analyzer/userlist_analyzer/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+## name config analyzer and search_analyzer
+POST testes_analyzer/userlist_analyzer/_search
+{
+  "query": {
+    "term": {
+      "name": {
+        "value": "����"
+      }
+    }
+  }
+}
+
+#intresting config analyzer not serarch_analyzer
+POST testes_analyzer/userlist_analyzer/_search
+{
+  "query": {
+    "term": {
+      "intresting": {
+        "value": "����"
+      }
+    }
+  }
+}
+
+POST testes_analyzer/userlist_analyzer/_search
+{
+  "query": {
+    "term": {
+      "homeaddress":  "�Ϻ���"
+    }
+  }
+}
+
+POST testes_analyzer/userlist_analyzer/_search
+{
+  "query": {
+    "term": {
+      "homeaddress":  "��·"
+    }
+  }
+}
+ 
+ 
+POST /userprofiling/usertag/17_search
+{
+  "query": {
+    "match": {
+      "FIELD": "TEXT"
+    }
+  }
+}
+ 
+POST testes_analyzer/userlist_analyzer/_search
+{
+  "query": {
+    "match": {
+      "homeaddress":  "����·"
+    }
+  }
+}
+ 
+POST /_analyze?analyzer=ik_smart & text=�Ϻ����ֶ���������·123�� & prett
+
+POST /_analyze?analyzer=ik_smart & pretty=true & text="�Ϻ����ֶ���������·123"
+
+GET /testes_analyzer/_analyze?text=�л����񹲺͹�&tokenizer=ik_smart
+
+
+PUT /espressuretest
+{
+    "settings" : {
+        "index" : {
+            "number_of_shards" : 1, 
+            "number_of_replicas" : 1 
+        }
+    }
+}
+
+DELETE /esdocpressuretest
+
+PUT /esdocpressuretest
+{
+    "settings" : {
+        "index" : {
+            "number_of_shards" : 5, 
+            "number_of_replicas" : 0 
+        }
+    }
+}
+
+
+DELETE /espressuretest
+
+POST /espressuretest/_search
+{
+  "query":{
+    "match_all": {}
+  }
+}
+POST /esdocpressuretest/_search
+{
+  "query":{
+    "match_all": {}
+  }
+}
+
+
+
+POST espressuretest/13800000002/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+ DELETE testes
+ 
+
+#��������  
+ PUT my_index
+{
+  "mappings": {
+    "my_type": {
+      "properties": {
+        "full_text": {
+          "type":  "string"
+        },
+        "exact_value": {
+          "type":  "string",
+          "index": "not_analyzed"
+        }
+      }
+    }
+  }
+}
+
+
+#��������
+
+PUT my_index/my_type/1
+{
+  "full_text":   "Quick Foxes!",
+  "exact_value": "Quick Foxes!"  
+}
+
+PUT my_index/my_type/2
+{
+  "full_text":   "In other words, all terms must be present in a single field for a document to match.",
+  "exact_value": "In other words, all terms must be present in a single field for a document to match."  
+}
+
+GET my_index/my_type/1
+
+PUT /myindex
+
+POST /myindex/mytype/_mapping
+{
+  "userlist_analyzer":{
+  "properties": {
+    "fulltext":{
+      "type":"text"
+    },
+    "extratext":{
+      "type":"text",
+      "analyzer": "ik_smart",
+      "search_analyzer": "ik_smart"
+    }
+  
+  }
+  }
+}
+
+PUT /myindex
+{
+    "settings" : {
+        "index" : {
+            "number_of_shards" : 1, 
+            "number_of_replicas" : 1 
+        }
+    }
+}
+
+PUT _cluster/settings
+{
+  "persistent": {
+    "cluster.routing.allocation.enable": "all"
+  }
+}
+PUT _cluster/settings 
+{ 
+  "persistent": { 
+        "cluster.routing.allocation.enable": "none" }
+}
+
+
+
+ GET userprofiling/usertag/
+
+
+
+
+POST ls-test-20160322/_search
+{
+  "query":{
+    "range": {
+      "start_time": {
+        "gte": "2017-01-11T19:29:00Z",
+        "lte": "2017-01-11T19:50:15Z"
+      }
+    }
+  }
+}
+
+GET    ls-test-20160322/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "range": {
+          "start_time": {
+            "gte": "2017-01-11T15:10:00Z",
+            "lte": "2017-01-11T15:50:00Z"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET / 
+{
+  "query":{
+    "match":{
+      "log_level":{
+        "query":"WARN",
+        "type" : "phrase"
+      }
+    }
+}
+}
+
+
+#1. search last location 
+GET ls-3-2017.04.13/_search
+{
+  "query": {
+    "match": {
+      "msisdn": "18016379761"
+    }
+  },
+  "sort": [
+    {
+      "start_time": {
+        "order": "desc"
+      }
+    }
+  ],
+  "from" : 0, "size" : 1
+}
+
+#1. search last location 
+GET ls-3-2017*/_search
+{
+  "query": {
+    "match": {
+      "msisdn": "17321280019"
+    }
+  },
+  "sort": [
+    {
+      "start_time": {
+        "order": "desc"
+      }
+    }
+  ],
+  "from" : 0, "size" : 1
+}
+
+#2. wander location search
+GET ls-3-2017*/_search
+{
+  "_source": ["city","start_time"], 
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "msisdn": "15352561140"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "start_time": {
+            "gte": "2017-04-11T15:10:00Z",
+            "lte": "2017-04-13T15:50:00Z"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET ls-3-2017*/_search
+{
+  "_source": ["city","start_time"], 
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "msisdn": "15352561140"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "start_time": {
+            "gte": "15:10:00Z",
+            "lte": "15:50:00Z"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+GET ls-3-2017.04.13/_search
+{
+  "aggs": {
+    "range": {
+      "date_range": {
+        "field": "date",
+        "ranges": [
+          {
+            "from": "2017-04-13T10:58:17.000Z",
+            "to": "2017-04-13T11:58:17.000Z"
+          },
+          {
+            "from": "2017-04-13T21:58:17.000Z",
+            "to": "2017-04-13T22:58:17.000Z"
+          }
+        ]
+      }
+    }
+  }
+}
+
+GET ls-3-2017.05*/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "msisdn": "15352561140"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "start_time": {
+            "gte": "2017-04-13T00:10:00Z",
+            "lte": "2017-04-13T15:50:00Z"
+          }
+        }
+      }
+    }
+  },
+  "aggs": {
+    "test": {
+      "date_histogram": {
+        "field": "start_time",
+        "interval": "hour",
+        "offset": "+1h"
+      }
+    }
+  }
+  
+}
+
+
+#1.get_history_track
+
+GET ls-3-2017*/_search
+{
+  "_source": ["city","start_time"], 
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "msisdn": "17321280019"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "start_time": {
+            "gte": "2017-04-11T15:10:00Z",
+            "lte": "2017-04-13T15:50:00Z"
+          }
+        }
+      }
+    }
+  }
+}
+
+#2.get_roaming_destination
+
+
+GET ls-3-2017*/_search
+{
+  "_source": ["city","start_time","end_time"], 
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "msisdn": "17321280019"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "start_time": {
+            "gte": "2017-04-11T15:10:00Z",
+            "lte": "2017-04-13T15:50:00Z"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+#3.get_time_interval
+GET ls-3-2017*/_search
+{
+  "_source": ["city","start_time","end_time"], 
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "msisdn": "17321280019"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "hours": {
+            "gte": "10",
+            "lte": "20"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+#4.get_weekend_location
+
+GET ls-3-2017*/_search
+{
+  "_source": ["city","start_time","end_time"], 
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "msisdn": "17321280019"
+          }
+        },
+      {
+          "match": {
+            "time_flag": "weekend"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "hours": {
+            "gte": "10",
+            "lte": "20"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+PUT /ls-3-2017.04.18/_settings
+{
+
+    "index" : {
+
+        "refresh_interval" : "30s"
+
+    } 
+  
+}
+
+PUT /ls-3-2017.04.18/_settings
+{
+
+    "index" : {
+        "number_of_replicas" : 1
+
+    }
+}
+
+
+
+GET /ls-3-2017.04.20/_settings
+
+
+DELETE  ls-3-2017.04.19
+
+PUT /ls-3-2017.05.03
+{
+    "settings" : {
+        "index" : {
+            "number_of_shards" : 7, 
+            "number_of_replicas" : 1
+        }
+    }
+}
+
+PUT /ls-3-2017.05.03/_settings
+{
+
+    "index" : {
+
+        "refresh_interval" : "30s"
+
+    } 
+  
+}
+
+
+
+ GET  /_template/nn*
+ 
+ DELETE /_template/nn_log
+ 
+ PUT _template/nn_log
+{
+  "template":   "nn_log-*", 
+  "mappings": {
+	"org.apache.hadoop.hdfs.server.namenode.FSEditLog" : {
+        "properties" : {
+          "Number_of_transactions" : {
+			"type": "integer"
+          },
+          "time_of_transactions" : {
+			"type": "integer"
+          },
+          "number_of_transactions_batched_in_Sync" : {
+			"type": "integer"
+          },
+          "number_of_syncs" : {
+			"type": "integer"
+          },
+          "synctimes" : {
+			"type": "long"
+          }		  
+        }
+      }
+    }
+}
+ 
+ 
+
+#
+# cluster update
+ 
+# 1.close routing
+ PUT _cluster/settings 
+ { 
+  "persistent": { 
+        "cluster.routing.allocation.enable": "none" }
+}
+ 
+# 2.
+ POST _flush/synced
+ 
+ 
+# 3.
+ PUT _cluster/settings
+{
+  "persistent": {
+    "cluster.routing.allocation.enable": "all"
+  }
+}
+#####
+ 
+ GET _nodes?filter_path=**.mlockall
+ 
+ 
+ GET  _template/wzfw3
+ 
+ DELETE _template/wzfw3
+ 
+  PUT _template/wzfw3
+{
+  "template":   "ls-3*", 
+      "settings" : {
+        "index" : {
+            "number_of_shards" : 8, 
+            "number_of_replicas" : 1,
+            "refresh_interval" : "30s"
+        }
+    },
+  "mappings": {
+	"morning" : {
+        "properties" : {
+          "hours" : {
+			      "type": "integer"
+          },
+          "prov" : {
+			      "type": "integer"
+          },
+          "zip_code" : {
+			      "type": "integer"
+          },
+          "city" : {
+			      "type": "long"
+          },
+          "time_flag" : { 
+			      "type": "keyword"
+          },
+          "msisdn":{
+            "type": "keyword"
+          },
+          "data_source":
+          {
+            "type": "keyword"
+          },
+          "start_time":{
+            "type": "date"
+          },
+          "loc":{
+            "type": "geo_point"
+          },
+          "ymd":{
+            "type": "keyword"
+          }
+        }
+      },
+      	"afternoon" : {
+        "properties" : {
+          "hours" : {
+			      "type": "integer"
+          },
+          "prov" : {
+			      "type": "integer"
+          },
+          "zip_code" : {
+			      "type": "integer"
+          },
+          "city" : {
+			      "type": "long"
+          },
+          "time_flag" : { 
+			      "type": "keyword"
+          },
+          "msisdn":{
+            "type": "keyword"
+          },
+          "data_source":
+          {
+            "type": "keyword"
+          },
+          "start_time":{
+            "type": "date"
+          },
+          "loc":{
+            "type": "geo_point"
+          },
+          "ymd":{
+            "type": "keyword"
+          }
+        }
+      },
+      
+      "night" : {
+        "properties" : {
+          "hours" : {
+			      "type": "integer"
+          },
+          "prov" : {
+			      "type": "integer"
+          },
+          "zip_code" : {
+			      "type": "integer"
+          },
+          "city" : {
+			      "type": "long"
+          },
+          "time_flag" : { 
+			      "type": "keyword"
+          },
+          "msisdn":{
+            "type": "keyword"
+          },
+          "data_source":
+          {
+            "type": "keyword"
+          },
+          "start_time":{
+            "type": "date"
+          },
+          "loc":{
+            "type": "geo_point"
+          },
+          "ymd":{
+            "type": "keyword"
+          }
+        }
+      }
+    }
+}
+
+put testsong
+
+
+ DELETE  nn_log-2017.04*
+ 
+ PUT /ls-3-2017-05-04
+{
+    "settings" : {
+        "index" : {
+            "number_of_shards" : 8, 
+            "number_of_replicas" : 0
+        }
+    }
+}
+ 
+GET _nodes/stats/thread_pool?pretty
+ 
+GET _template
+ 
+DELETE  nn_log-2017.05.0*
+
+ 
+PUT ls-3-2017-05-04 
+
+
+
+PUT  ls-3-2017.05.16 
+ 
+GET ls-3-2017.05.10/_mappings
+
+PUT /ls-3-2017.05.05/_settings
+{
+
+    "index" : {
+
+        "refresh_interval" : "30s"
+
+    } 
+  
+}
+
+GET ls-3-2017.05.15/_mapping
+
+
+DELETE ls-3-2017.05.16 
+
+PUT  ls-3-2017.05.18 
+
+GET ls-3-2017.05.16/_mapping
+
+PUT  ls-3-2017.05.23 
+
+PUT  ls-3-2017.05.24
+
+PUT  ls-3-2017.05.25
+
+PUT  ls-3-2017.05.26
+
+PUT  ls-3-2017.05.27
+
+ GET ls-3-2017.05.22/_search
+{
+  "query": {
+    "match": {
+      "msisdn": "17321280019"
+    }
+  }
+}
+
+GET /userprofiling/usertag/17784676420/_search
+
+
+
+```
+
+```json
+
 GET /_cat/indices
 
 
@@ -3524,3 +4614,5 @@ PUT music
   }
 }
 }
+```
+
