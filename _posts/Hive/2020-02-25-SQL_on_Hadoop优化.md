@@ -140,6 +140,8 @@ select t.user_id,count(*) from user_log t group by t.user_id
 1. 通过where条件过滤掉user_id为null的记录。
 2. 将为null的user_id设置一个随机数值。保证所有数据平均的分配到所有的reducer中处理。
 
+
+
 ### 6. 执行计划
 
 1. explain extend 
@@ -154,13 +156,13 @@ select t.user_id,count(*) from user_log t group by t.user_id
 
 ### 1. 推测执行
    1. 场景 
-     1. 集群中机器的负载是不一样的
-     2. 集群中配置是不同的
-     3. 数据倾斜
+          1. 集群中机器的负载是不一样的
+          2. 集群中配置是不同的
+          3. 数据倾斜
 
          <img src="https://tva1.sinaimg.cn/large/0082zybpgy1gc8z9c7zpqj30se0aead2.jpg" alt="image-20200225204034401" style="zoom:50%;" />
 
-    2. 解决方案
+        2. 解决方案
 
    Hadoop采用了推测执行（Speculative Execution）机制，它根据一定的法则推测出“拖后腿”的任务，并为这样的任务启动一个备份任务，让该任务与原始任务同时处理同一份数据，并最终选用最先成功运行完成任务的计算结果作为最终结果。
 
