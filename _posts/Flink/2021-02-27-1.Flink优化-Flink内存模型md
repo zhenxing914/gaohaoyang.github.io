@@ -4,7 +4,6 @@
 
 <img src="/Users/song/Library/Application Support/typora-user-images/image-20210227172036188.png" alt="image-20210227172036188" style="zoom:50%;" />
 
-
 **提示** 任务堆外内存也包括了用户代码使用的本地内存（非直接内存）。
 
 如上图所示，下表中列出了 Flink TaskExecutor 内存模型的所有组成部分，以影响其大小的相关配置参数。
