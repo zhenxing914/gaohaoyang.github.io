@@ -20,6 +20,8 @@ DATANODE：dfs.datanode.max.xceivers=8192：允许DATANODE打开多少个文件
 
 ## 3. 充分利用中间结果
 
+
+
 ## 4. 压缩
 
 
