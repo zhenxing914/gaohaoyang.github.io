@@ -360,6 +360,8 @@ public class MyService {
 }
 ```
 
+
+
 ## 4. Volatitle保证指令不会重排
 
 ### 1. 指令重排
