@@ -81,7 +81,11 @@ The following settings are used together to determine where to place each shard.
 
 ## 3.circuit breaker settings
 
+
+
 ## 4.recovery settings
+
+
 
 ##5 .ttl interval settings 
 
