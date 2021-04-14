@@ -207,7 +207,7 @@ On a.memberid = b.memberid。
 
 
 
-## 4. multi insert ,union all
+## 4. multi insert , union all
 
 multi insert适合基于同一个源表按照不同逻辑不同粒度处理插入不同表的场景，做到只需要扫描源表一次，job个数不变，减少源表扫描次数。
 
@@ -629,8 +629,6 @@ LEFT OUTER JOIN
 
 ON a.key = b.key;
 ```
-
-
 
 
 
